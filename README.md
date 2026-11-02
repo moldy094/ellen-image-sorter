@@ -47,11 +47,11 @@ cd ellen-image-sorter
 ./install.sh
 ```
 
-if you want it to read signatures off pictures too, run `./install.sh --ocr` instead. its about 1GB bigger because of torch.
+if you want it to read signatures off pictures too, run `./install.sh --ocr` instead. it takes up a lot more space because of torch.
 
 after that open ellen image sorter from your app menu, pick your folder, hit save then hit start. tick start on login if you want it running all the time.
 
-the first time it starts it builds a list of every ellen post on danbooru (around 10k) so it can match pictures without searching online every time. that takes about 10 minutes. after that it only grabs new posts every 12 hours.
+the first time it starts it builds a list of every ellen post on danbooru (around 10k) so it can match pictures without searching online every time. that takes a few minutes. after that it only grabs new posts every 12 hours.
 
 it also downloads the tagger model the first time it needs it, about 1.2GB. it unloads it from RAM when its been sitting idle for a while.
 
