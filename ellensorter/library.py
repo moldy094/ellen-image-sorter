@@ -61,11 +61,14 @@ def video_frame(path):
         os.remove(tmp.name)
 
 
-def open_picture(path):
+def open_picture(path, small=False):
     # gives back an RGB PIL image for images and videos (first frame for gifs)
+    # small=True is for hashing only, big jpegs decode way faster at a smaller size
     if is_video(path):
         return video_frame(path)
     im = Image.open(path)
+    if small and im.format == "JPEG":
+        im.draft("RGB", (1024, 1024))
     im.seek(0)
     if im.mode in ("RGBA", "LA", "P"):
         im = im.convert("RGBA")
@@ -132,12 +135,19 @@ def update_index(root, ignore, log=print):
         if path in known and known[path] == (st.st_size, st.st_mtime):
             continue
         try:
-            im = open_picture(path)
+            if is_video(path):
+                width = height = 0
+            else:
+                with Image.open(path) as probe:
+                    width, height = probe.size
+            im = open_picture(path, small=True)
             if im is None:
                 continue
+            width = width or im.width
+            height = height or im.height
             ph, dh = hashes_of(im)
             con.execute("insert or replace into files values (?,?,?,?,?,?,?,?)",
-                        (path, sha256_of(path), to_db(ph), to_db(dh), im.width, im.height, st.st_size, st.st_mtime))
+                        (path, sha256_of(path), to_db(ph), to_db(dh), width, height, st.st_size, st.st_mtime))
             added += 1
             if added % 200 == 0:
                 con.commit()
