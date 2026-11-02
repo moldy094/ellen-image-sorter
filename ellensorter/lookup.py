@@ -210,11 +210,22 @@ def from_signature(im, result):
         _reader = easyocr.Reader(["en"], gpu=False, verbose=False)
     small = im.copy()
     small.thumbnail((1600, 1600))
-    for _, text, conf in _reader.readtext(np.asarray(small), min_size=8, text_threshold=0.6):
-        if conf < 0.5:
-            continue
-        m = HANDLE.search(text)
-        if m:
+    pieces = [small]
+    # signatures are tiny and usually in a corner, so also read each corner at full size
+    w, h = im.size
+    for x0, y0, x1, y1 in ((0, 0, .32, .22), (.68, 0, 1, .22), (0, .78, .32, 1), (.68, .78, 1, 1), (.3, .85, .7, 1)):
+        corner = im.crop((int(x0 * w), int(y0 * h), int(x1 * w), int(y1 * h)))
+        grow = min(2.0, 900 / max(corner.width, 1))
+        if grow > 1:
+            corner = corner.resize((int(corner.width * grow), int(corner.height * grow)))
+        pieces.append(corner)
+    for piece in pieces:
+        for _, text, conf in _reader.readtext(np.asarray(piece), min_size=6, text_threshold=0.5):
+            if conf < 0.5:
+                continue
+            m = HANDLE.search(text)
+            if not m:
+                continue
             handle = m.group(1)
             if handle.lower() in ("mihoyo", "hoyoverse"):
                 continue
