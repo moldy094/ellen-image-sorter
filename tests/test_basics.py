@@ -48,6 +48,16 @@ def test_goonery_modes():
     assert not is_goonery("explicit", "off")
 
 
+def test_too_much():
+    from ellensorter.tagger import too_much
+    assert too_much({"1girl", "nude"}, "questionable") is None
+    assert too_much({"1girl", "bondage"}, "questionable") == "bondage"
+    assert too_much({"1girl"}, "explicit") == "rated explicit"
+    assert too_much({"school_uniform"}, "sensitive") == "lewd + school_uniform"
+    assert too_much({"school_uniform"}, "general") is None
+    assert too_much({"huge_breasts"}, "sensitive") is None
+
+
 def test_clean_name():
     from ellensorter.library import clean_name
     assert clean_name("freeman_(tkuh4475)") == "freeman (tkuh4475)"

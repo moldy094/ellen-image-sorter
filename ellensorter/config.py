@@ -35,6 +35,8 @@ DEFAULTS = {
         # suggestive = also bikini/cleavage type stuff
         "goonery": "lewd",
         "goonery_folder": "goonery",
+        # keep kink, sex acts and explicit stuff out of goonery (they go to _needs_review)
+        "goonery_filter": True,
         "separate_ai": True,
         "ai_folder": "ai",
         # try to grab the biggest version of the image from pixiv/twitter/danbooru

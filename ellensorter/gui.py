@@ -72,6 +72,9 @@ class Window(QWidget):
             self.goonery.addItem(text, key)
         self.goonery.setCurrentIndex([k for k, _ in GOONERY_CHOICES].index(self.cfg["sorting"]["goonery"]))
         form.addRow("goonery folder", self.goonery)
+        self.goonfilter = QCheckBox("keep the weird stuff out of goonery (sends it to _needs_review)")
+        self.goonfilter.setChecked(self.cfg["sorting"]["goonery_filter"])
+        form.addRow(self.goonfilter)
         self.ai = QCheckBox("put ai generated stuff in its own folder")
         self.ai.setChecked(self.cfg["sorting"]["separate_ai"])
         form.addRow(self.ai)
@@ -170,6 +173,7 @@ class Window(QWidget):
         c["library"]["root"] = self.root.text().strip()
         c["library"]["character_tag"] = self.tag.text().strip() or "ellen_joe"
         c["sorting"]["goonery"] = self.goonery.currentData()
+        c["sorting"]["goonery_filter"] = self.goonfilter.isChecked()
         c["sorting"]["separate_ai"] = self.ai.isChecked()
         c["sorting"]["upgrade_quality"] = self.upgrade.isChecked()
         c["sorting"]["duplicates"] = self.dupes.currentData()

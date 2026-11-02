@@ -12,6 +12,7 @@ it runs as a systemd service so you set it up once and forget about it. theres a
 - sorts by pose into portraits, full body, sitting, lying down, from behind, action, with others and misc
 - names files after the artist, like `portraits/tanjwi 3.jpg`. if it cant find one its `unknown 12.jpg`
 - lewd stuff goes in `goonery/` and ai generated stuff goes in `ai/`. you can turn both off
+- kink, sex acts and explicit stuff stay out of goonery. they go to `_needs_review/` so you can decide yourself. theres a checkbox for this too
 - looks for a bigger version of the picture on pixiv, twitter and danbooru and swaps it in if it finds one
 - checks every new file against everything you already have so you dont end up with the same picture twice
 - works on videos and gifs too
@@ -62,7 +63,7 @@ it tries these in order and stops at the first one that knows:
 1. the file name. pixiv saves (`123456789_p0.png`) and danbooru downloads have the artist or the post id in them
 2. danbooru, by the files md5
 3. the local danbooru list, by comparing the picture itself. this catches most stuff even if its been resized or recompressed
-4. saucenao, if you put a key in. this one searches twitter and pixiv too so it finds a lot more. you can get a free key at https://saucenao.com/user.php?page=search-api
+4. saucenao, if you put a key in. it searches pixiv and a bunch of other sites. you can get a free key at https://saucenao.com/user.php?page=search-api
 5. the signature on the picture, if you installed it with `--ocr`. it looks for @handles and patreon links
 6. info stored inside the file itself
 
@@ -98,6 +99,7 @@ theyre in `~/.config/ellen-sorter/config.toml`. the gui writes this file and the
 | `library.character_tag` | danbooru tag for the list, `ellen_joe` by default |
 | `library.ignore` | folders and files in the root it leaves alone |
 | `sorting.goonery` | `off`, `lewd` (questionable and explicit) or `suggestive` (also bikinis and that kind of thing) |
+| `sorting.goonery_filter` | keep kink, sex acts and explicit stuff out of goonery |
 | `sorting.separate_ai` | put ai stuff in its own folder |
 | `sorting.upgrade_quality` | look for bigger versions |
 | `sorting.duplicates` | `trash` keeps the best copy, `keep` keeps both |

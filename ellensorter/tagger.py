@@ -104,6 +104,36 @@ def pick_pose(tags):
 DANBOORU_RATINGS = {"g": "general", "s": "sensitive", "q": "questionable", "e": "explicit"}
 
 
+# stuff i dont want ending up in the goonery folder, these go to _needs_review instead
+TOO_MUCH = {"bdsm", "bondage", "shibari", "rope", "restrained", "gag", "gagged", "ball_gag", "slave", "leash",
+            "tentacles", "futanari", "vore", "giantess", "inflation", "pregnant", "lactation", "scat", "urination",
+            "peeing", "omorashi", "vomit", "guro", "gore", "netorare", "mind_control", "hypnosis", "rape",
+            "molestation", "humiliation", "footjob", "ahegao", "bestiality", "gangbang", "group_sex", "anal",
+            "sex_toy", "vibrator", "dildo", "object_insertion", "body_writing", "exhibitionism",
+            "sex", "vaginal", "oral", "fellatio", "paizuri", "cunnilingus", "handjob", "grinding", "penis", "cum",
+            "cum_in_pussy", "cum_on_body", "facial", "after_sex", "erection", "masturbation", "fingering",
+            "testicles", "hetero",
+            "gigantic_breasts", "huge_breasts", "huge_ass", "thick_thighs", "bursting_breasts",
+            "breast_expansion", "hyper_breasts", "wide_hips"}
+
+# nothing that looks underage or school themed in there either
+NOT_LEWD = {"loli", "shota", "child", "aged_down", "toddler", "young", "kindergarten_uniform", "school_uniform",
+            "serafuku", "school_swimsuit", "gym_uniform", "randoseru", "ellen_joe_(on_campus)"}
+
+
+def too_much(tags, rating):
+    # returns the reason it shouldnt go in goonery, or None if its fine
+    if rating == "explicit":
+        return "rated explicit"
+    if rating == "general":
+        return None
+    if tags & NOT_LEWD:
+        return "lewd + " + sorted(tags & NOT_LEWD)[0]
+    if rating == "questionable" and tags & TOO_MUCH:
+        return sorted(tags & TOO_MUCH)[0]
+    return None
+
+
 def is_goonery(rating, mode):
     if mode == "off":
         return False

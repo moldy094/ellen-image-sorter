@@ -157,6 +157,17 @@ def sort_file(path, cfg):
         tags, rating = tagger.tag(im, cfg["tagger"]["model"])
         meta = set()
 
+    # dont let the weird stuff into the goonery folder, you can look at it and decide yourself
+    if sort_cfg["goonery_filter"] and sort_cfg["goonery"] != "off":
+        reason = tagger.too_much(tags | meta, rating)
+        if reason:
+            parked = library.needs_review(path, root)
+            library.write_manifest(root, original_name, "parked-goonery-filter", parked, found["artist"], found["source"], "", "")
+            activity({"file": original_name, "note": f"parked in _needs_review ({reason})"})
+            log.info(f"  parked in _needs_review ({reason})")
+            notify.sorted_ok(cfg, f"{original_name} went to _needs_review ({reason})")
+            return
+
     is_ai = bool(found["ai_hint"]) or bool((tags | meta) & {"ai-generated", "ai-assisted"})
     if sort_cfg["separate_ai"] and is_ai:
         tree = sort_cfg["ai_folder"]
