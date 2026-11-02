@@ -96,6 +96,7 @@ class Window(QWidget):
         self.ocr.setChecked(self.cfg["sources"]["ocr"])
         if not lookup.ocr_available():
             self.ocr.setText("read signatures off the picture (easyocr isnt installed)")
+            self.ocr.setChecked(False)
             self.ocr.setEnabled(False)
         form.addRow(self.ocr)
         layout.addWidget(box)
@@ -153,6 +154,7 @@ class Window(QWidget):
             row.addWidget(b)
         layout.addLayout(row)
 
+        self.last_lines = None
         self.refresh()
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.refresh)
@@ -230,6 +232,10 @@ class Window(QWidget):
                 lines = f.readlines()[-40:]
         except FileNotFoundError:
             pass
+        # only redo the list if something new happened, otherwise it keeps jumping back to the top
+        if lines == self.last_lines:
+            return
+        self.last_lines = lines
         self.recent.clear()
         for line in reversed(lines):
             try:
