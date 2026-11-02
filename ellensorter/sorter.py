@@ -13,6 +13,7 @@ import io
 import json
 import time
 import logging
+import warnings
 
 import requests
 from PIL import Image
@@ -32,6 +33,8 @@ def setup_logging():
         format="%(asctime)s %(levelname)s %(message)s",
         handlers=[logging.FileHandler(config.LOG_FILE), logging.StreamHandler()],
     )
+    # tons of images have slightly broken exif, PIL warns about every one of them
+    warnings.filterwarnings("ignore", category=UserWarning, module="PIL")
     # huggingface logs every single http request otherwise
     for noisy in ("httpx", "huggingface_hub", "urllib3"):
         logging.getLogger(noisy).setLevel(logging.WARNING)

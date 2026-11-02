@@ -17,6 +17,10 @@ from PIL import Image
 
 from . import config
 
+# some of these pictures are huge (150 megapixels and up), PIL thinks thats an attack
+# and refuses to open them unless you tell it not to worry
+Image.MAX_IMAGE_PIXELS = None
+
 POSES = ["portraits", "full body", "sitting", "lying down", "from behind", "action", "with others", "misc"]
 IMAGE_EXTS = (".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".avif", ".jxl")
 VIDEO_EXTS = (".mp4", ".webm", ".mkv", ".mov", ".m4v")
