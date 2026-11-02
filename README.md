@@ -1,6 +1,6 @@
 # ellen image sorter
 
-for those of culture
+god this is so fucking stupid
 
 you drop ellen joe pictures and videos into a folder and this sorts them for you in the background. it works out the pose, finds who drew it, grabs the highest quality version it can find, gets rid of duplicates and moves everything into the right folder.
 
