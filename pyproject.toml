@@ -1,0 +1,30 @@
+[project]
+name = "ellen-image-sorter"
+version = "1.0.0"
+description = "for those of culture. sorts ellen joe pictures by pose and artist in the background"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    "requests",
+    "pillow",
+    "imagehash",
+    "numpy",
+    "onnxruntime",
+    "huggingface_hub",
+    "tomli-w",
+]
+
+[project.optional-dependencies]
+gui = ["PySide6"]
+ocr = ["easyocr"]
+
+[project.scripts]
+ellen-sorter = "ellensorter.__main__:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["ellensorter"]

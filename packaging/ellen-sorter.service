@@ -1,0 +1,15 @@
+[Unit]
+Description=ellen image sorter (for those of culture)
+After=graphical-session.target network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/share/ellen-sorter/venv/bin/ellen-sorter run
+Restart=on-failure
+RestartSec=30
+# its a background job, let everything else go first
+Nice=10
+IOSchedulingClass=idle
+
+[Install]
+WantedBy=default.target

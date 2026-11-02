@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=ellen image sorter
+Comment=for those of culture
+Exec=ELLEN_SORTER_BIN gui
+Icon=image-x-generic
+Categories=Graphics;Utility;
