@@ -93,7 +93,7 @@ class Window(QWidget):
         form = QFormLayout(box)
         self.saucenao = QLineEdit(self.cfg["sources"]["saucenao_key"])
         self.saucenao.setEchoMode(QLineEdit.Password)
-        self.saucenao.setPlaceholderText("optional, finds way more artists")
+        self.saucenao.setPlaceholderText("optional, also searches pixiv and other sites")
         form.addRow("saucenao key", self.saucenao)
         self.ocr = QCheckBox("read signatures off the picture")
         self.ocr.setChecked(self.cfg["sources"]["ocr"])
