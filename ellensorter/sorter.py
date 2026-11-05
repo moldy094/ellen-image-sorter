@@ -244,11 +244,17 @@ def sort_everything_now(cfg):
         sort_one_safely(f, cfg)
 
 
+SYNC_RETRY_MINUTES = 30
+sync_retry_at = 0
+sync_warned = False
+
+
 def last_sync_file():
     return os.path.join(config.STATE_DIR, "last_catalog_sync")
 
 
 def sync_catalog_if_due(cfg):
+    global sync_retry_at, sync_warned
     if not cfg["sources"]["danbooru_catalog"]:
         return
     try:
@@ -257,14 +263,22 @@ def sync_catalog_if_due(cfg):
         last = 0
     if time.time() - last < cfg["sources"]["catalog_sync_hours"] * 3600:
         return
+    if time.time() < sync_retry_at:
+        return
     try:
         added = catalog.sync(cfg["library"]["character_tag"], log=log.info)
         log.info(f"catalog sync done, {added} new posts")
         with open(last_sync_file(), "w") as f:
             f.write(str(time.time()))
+        sync_warned = False
     except Exception as e:
         log.warning(f"catalog sync failed: {e}")
-        notify.problem(cfg, f"couldnt update the danbooru catalog: {e}")
+        # danbooru goes down sometimes, wait a bit instead of asking again right away
+        sync_retry_at = time.time() + SYNC_RETRY_MINUTES * 60
+        # only tell the user once, not every time it fails again
+        if not sync_warned:
+            notify.problem(cfg, f"couldnt update the danbooru catalog: {e}")
+            sync_warned = True
 
 
 def run():
